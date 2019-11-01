@@ -38,3 +38,7 @@
 .form-group select {
     width: 40%;
 }
+
+.pane-group div{
+    overflow: scroll;
+}

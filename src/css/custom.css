@@ -1,0 +1,13 @@
+.toolbar-text {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.pane-placeholder {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 15pt;
+    color: lightgray;
+}

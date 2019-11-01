@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ActualMoney</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/photon.min.css">
+    <link rel="stylesheet" href="css/custom.css">
+  </head>
+
+  <body>
+    <!-- Wrap your entire app inside .window -->
+    <div class="window" id="app">
+      <!-- .toolbar-header sits at the top of your app -->
+      <header class="toolbar toolbar-header" style="-webkit-app-region: drag">
+        <h1 class="title">ActualMoney</h1>
+        <div class="toolbar-actions">
+            <button class="btn btn-default" v-on:click="loadAccounts()">
+                <span class="icon icon-cw icon-text"></span>
+                Load Accounts
+            </button>
+
+            <button class="btn btn-default pull-right">
+                <span class="icon icon-download icon-text"></span> 
+                Import
+            </button>
+            <button class="btn btn-default pull-right" v-on:click="discardTransactions()">
+                <span class="icon icon-trash icon-text"></span>
+                Discard
+            </button>
+        </div>
+      </header>
+
+      <!-- .window-content -->
+      <div class="window-content">
+        <div class="pane-group">
+          <!-- Sidebar -->
+          <div class="pane-one-fourth sidebar">
+              <ul class="list-group">
+                  <li class="list-group-header">
+                    <h3>Accounts</h3>
+                  </li>
+                  <li v-for="account in accounts" 
+                      class="list-group-item" 
+                      v-bind:class="{ active: account.id == selectedAccount }"
+                      v-bind:key="account.id"
+                      v-on:click="selectAccount(account.id)"
+                  >
+                      <strong>{{ account.name }}</strong>
+                      <p>{{ transactionCount(account.id) }}</p>
+                  </li>
+                </ul>
+          </div>
+
+          <!-- Main Content -->
+          <div class="pane">
+              <div class="padded-more">
+                <span class="pane-placeholder" v-if="!selectedAccount">Select Account</span>
+                <div v-if="selectedAccount">
+                  <form>
+                    <div class="form-group">
+                        <label>Account in Actual</label>
+                        <select class="form-control" v-model="selectedImportAccount">
+                            <option value="default" disabled hidden key="default">
+                              {{ Object.keys(importAccounts).length == 0 ? 'No imported accounts' : 'Select import account' }}
+                            </option>
+
+                            <option 
+                              v-for="account in importAccounts"
+                              v-bind:key="account.number"
+                              v-bind:value="account.number"
+                            >
+                              {{ account.name }}
+                            </option>
+                        </select>
+                    </div>
+                  </form>
+                  <p>{{ selectedImportAccount == null ? 'null' : selectedImportAccount }}</p>
+                  <p>{{ accountMatch }}</p>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="toolbar toolbar-footer">
+        <span class="toolbar-text">
+            Received {{ Object.keys(importTransactions).length }} transactions
+            in {{ Object.keys(importAccounts).length }} account{{ Object.keys(importAccounts).length > 1 ? 's' : ''}}
+            from MoneyMoney
+        </span>
+      </footer>
+    </div>
+    <script>require('./renderer.js')</script>
+  </body>
+</html>

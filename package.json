@@ -1,0 +1,67 @@
+{
+  "name": "actualmoney",
+  "productName": "ActualMoney",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\"",
+    "postinstall": "patch-package"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Felix Heilmeyer",
+    "email": "code@fehe.eu"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "extendInfo": "Info.plist"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ActualMoney"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@actual-app/api": "^1.0.9",
+    "csv-parse": "^4.6.5",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^5.1.0",
+    "moment": "^2.24.0",
+    "patch-package": "^6.2.0",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.45",
+    "@electron-forge/maker-deb": "6.0.0-beta.45",
+    "@electron-forge/maker-rpm": "6.0.0-beta.45",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.45",
+    "@electron-forge/maker-zip": "6.0.0-beta.45",
+    "electron": "7.0.0"
+  }
+}

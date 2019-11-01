@@ -38,9 +38,6 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  if (process.env.NODE_ENV !== 'production') {
-    require('vue-devtools').install()
-  }
 })
 
 // Quit when all windows are closed.

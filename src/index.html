@@ -46,7 +46,12 @@
                       v-bind:key="account.id"
                       v-on:click="selectAccount(account.id)"
                   >
-                      <strong>{{ account.name }}</strong>
+                      <strong 
+                        :class="{
+                          positive: inSync(account.id) && inSync(account.id) != null,
+                          negative: !inSync(account.id) && inSync(account.id) != null
+                        }"
+                      >{{ account.name }}</strong>
                       <p>{{ transactionCount(account.id) }}</p>
                   </li>
                 </ul>
@@ -59,7 +64,7 @@
                 <div v-if="selectedAccount">
                   <form>
                     <div class="form-group">
-                        <label>Account in Actual</label>
+                        <label>Imported Account</label>
                         <select class="form-control" v-model="selectedImportAccount">
                             <option value="default" disabled hidden key="default">
                               {{ Object.keys(importAccounts).length == 0 ? 'No imported accounts' : 'Select import account' }}
@@ -75,8 +80,17 @@
                         </select>
                     </div>
                   </form>
-                  <p>{{ selectedImportAccount == null ? 'null' : selectedImportAccount }}</p>
-                  <p>{{ accountMatch }}</p>
+                  <p v-if="importAccounts[selectedImportAccount] != null">
+                    <span v-if="!inSync(selectedAccount, selectedImportAccount)">
+                        <span class="negative">Out of sync.</span>
+                        <i>Actual</i> balance ({{ accounts.find(acc => acc.id == selectedAccount).balance }}€) does not equal imported balance
+                        ({{ importAccounts[selectedImportAccount].balance }}€).
+                    </span>
+                    <span v-if="inSync(selectedAccount, selectedImportAccount)">
+                        <span class="positive">Account is in sync.</span>
+                        Balance: {{ importAccounts[selectedImportAccount].balance }}€
+                    </span>
+                  </p>
                 </div>
               </div>
           </div>

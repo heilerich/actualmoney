@@ -50,8 +50,16 @@ var app = new Vue({
       let importId = this.accountMatch[id]
       let importAccount = this.importAccounts[importId]
       if (!importId || !importAccount || !importAccount.transactions || importAccount.transactions == 0) { return 'No transactions' }
+
+
       if (importAccount.transactions == 1) { return 'One transaction' }
       return `${importAccount.transactions} transactions`
+    },
+    inSync: function(accountId, importAccountId) {
+      let account = this.accounts.find(acc => acc.id == accountId)
+      let importAccount = importAccountId != null ? this.importAccounts[importAccountId] : this.importAccounts[this.accountMatch[accountId]]
+      if (!account || !importAccount) { return null }
+      return account.balance === importAccount.balance
     }
   },
   mounted() {
@@ -115,7 +123,7 @@ function parseCsv(data) {
   records.forEach( record => {
     Vue.set(app.importAccounts, record.MyAccountNumber, {
       name: record.MyAccountName,
-      balance: record.MyAccountBalance,
+      balance: parseFloat(record.MyAccountBalance),
       number: record.MyAccountNumber,
     })
     let newRecord = {

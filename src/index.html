@@ -6,6 +6,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/photon.min.css">
     <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="../node_modules/vue-loading-overlay/dist/vue-loading.css">
   </head>
 
   <body>
@@ -20,7 +21,7 @@
                 Load Accounts
             </button>
 
-            <button class="btn btn-default pull-right">
+            <button class="btn btn-default pull-right" v-on:click="sendTransactions">
                 <span class="icon icon-download icon-text"></span> 
                 Import
             </button>

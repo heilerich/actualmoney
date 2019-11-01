@@ -8,9 +8,12 @@ const Vue = require('vue/dist/vue.common')
 const actual = require('@actual-app/api')
 const ElectronStore = require('electron-store');
 const moment = require('moment')
+const overlay = require('vue-loading-overlay')
 
 const store = new ElectronStore();
 const budget = "Meins"
+
+Vue.use(overlay)
 
 var app = new Vue({
   el: '#app',
@@ -61,7 +64,7 @@ var app = new Vue({
       if (!account || !importAccount) { return null }
       return account.balance === importAccount.balance
     },
-    transactionsToSend(accountId) {
+    transactionsToSend: function(accountId) {
       let account = this.accounts.find(acc => acc.id == accountId)
       let importAccount = this.importAccounts[this.accountMatch[accountId]]
       if (!account || !importAccount) { return null }
@@ -69,6 +72,40 @@ var app = new Vue({
       return Object.values(this.importTransactions).filter (transaction => {
         return transaction.MyAccountNumber == importAccount.number && transaction.Date > account.firstTransaction
       })
+    },
+    sendTransactions: async function() {
+      let loader = this.$loading.show({
+        canCancel: false,
+      });
+
+      let jobs = (this.accounts.map((account) => {
+        let records = this.transactionsToSend(account.id)
+        if (!records) { return null }
+
+        let transactions = records.map(record => {
+          return {
+            account_id: account.id,
+            date: record.Date.format('YYYY-MM-DD'),
+            amount: parseFloat(record.Amount) * 100,
+            imported_payee: record.Name,
+            payee: record.Name,
+            notes: record.Purpose,
+            imported_id: record.ID
+          }
+        })
+
+        return {
+          id: account.id,
+          transactions
+        }
+      })).filter(ele => ele != null)
+
+      await actual.runWithBudget(budget, async function() {
+        return await Promise.all(jobs.map( async(job) => actual.importTransactions(job.id, job.transactions)))
+      })
+
+      await this.loadAccounts()
+      loader.hide()
     }
   },
   mounted() {
@@ -136,7 +173,7 @@ function parseCsv(data) {
     })
     let newRecord = {
       ...record,
-      Date: moment.unix(record.Date),
+      Date: moment(moment.unix(record.Date).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
       ValueDate: moment.unix(record.ValueDate)
     }
     Vue.set(app.importTransactions, newRecord.ID, newRecord)
@@ -147,6 +184,8 @@ function parseCsv(data) {
     let transactionCount = Object.values(app.importTransactions).filter(transaction => transaction.MyAccountNumber == value.number).length
     app.importAccounts[key]['transactions'] = transactionCount
   })
+
+  app.loadAccounts()
 }
 
 ipcRenderer.on('open-file', (event, message) => {

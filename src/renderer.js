@@ -60,6 +60,15 @@ var app = new Vue({
       let importAccount = importAccountId != null ? this.importAccounts[importAccountId] : this.importAccounts[this.accountMatch[accountId]]
       if (!account || !importAccount) { return null }
       return account.balance === importAccount.balance
+    },
+    transactionsToSend(accountId) {
+      let account = this.accounts.find(acc => acc.id == accountId)
+      let importAccount = this.importAccounts[this.accountMatch[accountId]]
+      if (!account || !importAccount) { return null }
+
+      return Object.values(this.importTransactions).filter (transaction => {
+        return transaction.MyAccountNumber == importAccount.number && transaction.Date > account.firstTransaction
+      })
     }
   },
   mounted() {
@@ -72,7 +81,6 @@ var app = new Vue({
     accountMatch(newMatches) {
       if(newMatches !== {}) {
         store.set('accountMatch', newMatches)
-        console.log('Save', newMatches)
       }
     },
     selectedImportAccount(newValue) {

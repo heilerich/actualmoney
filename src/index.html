@@ -80,17 +80,26 @@
                         </select>
                     </div>
                   </form>
-                  <p v-if="importAccounts[selectedImportAccount] != null">
-                    <span v-if="!inSync(selectedAccount, selectedImportAccount)">
-                        <span class="negative">Out of sync.</span>
-                        <i>Actual</i> balance ({{ accounts.find(acc => acc.id == selectedAccount).balance }}€) does not equal imported balance
-                        ({{ importAccounts[selectedImportAccount].balance }}€).
-                    </span>
-                    <span v-if="inSync(selectedAccount, selectedImportAccount)">
-                        <span class="positive">Account is in sync.</span>
-                        Balance: {{ importAccounts[selectedImportAccount].balance }}€
-                    </span>
-                  </p>
+                  <div v-if="importAccounts[selectedImportAccount] != null">
+                    <p>
+                      <span v-if="!inSync(selectedAccount, selectedImportAccount)">
+                          <span class="negative">Out of sync.</span>
+                          <i>Actual</i> balance ({{ accounts.find(acc => acc.id == selectedAccount).balance }}€)
+                          does not equal imported balance ({{ importAccounts[selectedImportAccount].balance }}€).
+                      </span>
+                      <span v-if="inSync(selectedAccount, selectedImportAccount)">
+                          <span class="positive">Account is in sync.</span>
+                          Balance: {{ importAccounts[selectedImportAccount].balance }}€
+                      </span>
+                    </p>
+                    <p>
+                        {{ transactionsToSend(selectedAccount).length }} 
+                        transaction{{transactionsToSend(selectedAccount).length != 1 ? 's' : ''}} to import.
+                        {{ importAccounts[selectedImportAccount].transactions - transactionsToSend(selectedAccount).length }}
+                        transaction{{ importAccounts[selectedImportAccount].transactions - transactionsToSend(selectedAccount).length != 1 ? 's' : ''}}
+                        were ignored because they predate the account starting balance.
+                    </p>
+                  </div>
                 </div>
               </div>
           </div>

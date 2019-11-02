@@ -7,6 +7,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
+  if (mainWindow) {return}
   mainWindow = new BrowserWindow({
     width: 800,
     height: 400,
@@ -33,13 +34,6 @@ function createWindow () {
   })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', () => {
-  createWindow()
-})
-
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
@@ -60,14 +54,26 @@ app.on('activate', function () {
 app.on('open-file', function(event, path) {
   event.preventDefault()
   if(!mainWindow) {
-    createWindow()
-    mainWindow.webContents.once('did-finish-load', () => {
-      mainWindow.webContents.send('open-file', path)
-    })
+    if (!app.isReady()) {
+      app.once('ready', () => {
+        createWindow()
+        mainWindow.webContents.once('did-finish-load', () => {
+          mainWindow.webContents.send('open-file', path)
+        })
+      })
+    } else {
+      createWindow()
+      mainWindow.webContents.once('did-finish-load', () => {
+        mainWindow.webContents.send('open-file', path)
+      })
+    }
   } else {
     mainWindow.webContents.send('open-file', path)
   }
+})
 
+app.on('ready', () => {
+  createWindow()
 })
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

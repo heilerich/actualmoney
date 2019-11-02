@@ -4,10 +4,10 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>AcM File</string>
+			<string>ActualMoney Import File</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>acm</string>
+				<string>actualmoney</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>

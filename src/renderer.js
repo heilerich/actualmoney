@@ -9,18 +9,21 @@ const actual = require('@actual-app/api')
 const ElectronStore = require('electron-store');
 const moment = require('moment')
 const overlay = require('vue-loading-overlay')
+const Swal = require('sweetalert2')
 
 const store = new ElectronStore();
 const budget = "Meins"
 
 Vue.use(overlay)
 
+var accountTimeout = null
+
 var app = new Vue({
   el: '#app',
   data: {
     selectedAccount: null,
     selectedImportAccount: 'default',
-    accounts: {},
+    accounts: [],
     importAccounts: {},
     importTransactions: {},
     accountMatch: {}
@@ -31,6 +34,16 @@ var app = new Vue({
       this.selectedImportAccount = this.accountMatch[id] || 'default'
     },
     loadAccounts: async function () {
+      accountTimeout = setTimeout(() => {
+        if (this.accounts.length > 0) { return }
+        Swal.fire({
+          type: 'error',
+          title: 'Connection failure',
+          text: 'Please make sure Actual is running, then try reloading accounts.',
+          showConfirmButton: false,
+          timer: 2000
+        })
+      }, 1000)
       this.accounts = await actual.runWithBudget(budget, async function() {
         return await Promise.all((await actual.getAccounts()).map(async (account) => {
           let transactions = (await actual.getTransactions(account.id)).map( (transaction) => {
@@ -44,6 +57,7 @@ var app = new Vue({
           return {...account, transactions, balance, firstTransaction }
         }))
       })
+      clearTimeout(accountTimeout)
     },
     discardTransactions: function () {
       this.importAccounts = {}
@@ -74,6 +88,11 @@ var app = new Vue({
       })
     },
     sendTransactions: async function() {
+      await this.loadAccounts()
+      if (!this.accounts || this.accounts.length === 0) {
+        return
+      }
+
       let loader = this.$loading.show({
         canCancel: false,
       });
@@ -106,6 +125,12 @@ var app = new Vue({
 
       await this.loadAccounts()
       loader.hide()
+      Swal.fire({
+          type: 'success',
+          title: 'Import finished',
+          showConfirmButton: false,
+          timer: 2000
+      })
     }
   },
   mounted() {

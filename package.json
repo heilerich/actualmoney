@@ -24,7 +24,9 @@
         "extendInfo": "Info.plist",
         "appBundleId": "de.heilerich.actualmoney",
         "appCategoryType": "public.app-category.finance",
-        "osxSign": true,
+        "osxSign": {
+          "type": "development"
+        },
         "icon": "Icon"
       },
       "makers": [
@@ -58,6 +60,7 @@
     "electron-store": "^5.1.0",
     "moment": "^2.24.0",
     "patch-package": "^6.2.0",
+    "sweetalert2": "^8.18.7",
     "vue": "^2.6.10",
     "vue-loading-overlay": "^3.2.0"
   },

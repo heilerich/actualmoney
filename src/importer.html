@@ -95,7 +95,7 @@
                         </select>
                     </div>
                   </form>
-                  <div v-if="importAccounts[selectedImportAccount] != null">
+                  <div v-if="selectedImportAccountOb != null">
                     <p>
                       <span v-if="!inSync(selectedAccount, selectedImportAccount)">
                           <span class="negative">Out of sync.</span>
@@ -151,6 +151,6 @@
         </span>
       </footer>
     </div>
-    <script>require('./renderer.js')</script>
+    <script>require('./importer.js')</script>
   </body>
 </html>

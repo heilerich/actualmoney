@@ -18,7 +18,7 @@ local linebreak    = "\n"
 local reverseOrder = false
 
 
-Exporter{version          = 1.09,
+Exporter{version          = 1.0.0,
          format           = MM.localizeText("ActualMoney"),
          fileExtension    = "actualmoney",
          reverseOrder     = reverseOrder,

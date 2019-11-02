@@ -1,5 +1,7 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu, shell} = require('electron')
+const defaultMenu = require('electron-default-menu');
+const {checkExtensionVersion} = require('./extension')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,7 +22,7 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('src/index.html')
+  mainWindow.loadFile('src/importer.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -34,6 +36,26 @@ function createWindow () {
   })
 }
 
+let installerWindow
+
+function showInstaller () {
+  if (installerWindow) {return}
+  installerWindow = new BrowserWindow({
+    width: 450,
+    height: 550,
+    resizable: false,
+    titleBarStyle: 'hidden',
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+  installerWindow.loadFile('src/installer.html')
+  installerWindow.on('closed', function () {
+    installerWindow = null
+  })
+}
+
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
@@ -46,7 +68,7 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
+  if (mainWindow == null) {
     createWindow()
   }
 })
@@ -72,8 +94,29 @@ app.on('open-file', function(event, path) {
   }
 })
 
+function setupMenu() {
+  const menu = defaultMenu(app, shell);
+ 
+  // Add custom menu
+  menu[0].submenu.splice(1,0, {
+    label: 'Install MoneyMoney extension',
+      click: (item, focusedWindow) => {
+        showInstaller()
+    }
+  })
+  menu[0].submenu.splice(1,0, { type: 'separator' })
+ 
+  // Set top-level application menu, using modified template
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+}
+
 app.on('ready', () => {
-  createWindow()
+  if (!checkExtensionVersion()) {
+    showInstaller()
+  } else {
+    createWindow()
+  }
+  setupMenu()
 })
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

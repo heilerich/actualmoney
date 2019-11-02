@@ -1,0 +1,17 @@
+.swal2-container {
+    padding: 0 !important;
+}
+.swal2-popup {
+    padding: 0 !important;
+    height: 100%;
+}
+.swal2-header {
+    font-size: 0.8em;
+}
+.swal2-content {
+    font-size: 1em;
+    padding: 0px 20px 0px 20px;
+}
+.swal2-styled.swal2-confirm {
+    background-color: darkgreen !important;
+}

@@ -1,7 +1,7 @@
 {
   "name": "actualmoney",
   "productName": "ActualMoney",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -36,6 +36,7 @@
   "dependencies": {
     "@actual-app/api": "^1.0.9",
     "csv-parse": "^4.6.5",
+    "electron-default-menu": "^1.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
     "moment": "^2.24.0",

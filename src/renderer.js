@@ -167,6 +167,8 @@ var app = new Vue({
       }
     },
     selectedBudget() {
+      this.accounts = []
+      this.selectedAccount = null
       this.loadAccounts()
     }
   }

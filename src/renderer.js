@@ -50,9 +50,7 @@ var app = new Vue({
             return {...transaction, date: moment(transaction.date, 'YYYY-MM-DD')}
           })
           let balance = transactions.reduce((total, current) => { return total + current.amount }, 0) / 100
-          let firstTransaction = moment(transactions.reduce((max, current) => { 
-            return current.date.valueOf() > max ? current.date.valueOf() : max
-          }, 0))
+          let firstTransaction = moment.min(transactions.map(transaction => transaction.date))
 
           return {...account, transactions, balance, firstTransaction }
         }))

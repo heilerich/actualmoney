@@ -1,5 +1,7 @@
 os: osx
 language: node_js
+node_js:
+  - 11
 cache:
   yarn: true
   directories:
@@ -21,3 +23,5 @@ deploy:
   on:
     repo: heilerich/actualmoney
     tags: true
+notifications:
+  email: false

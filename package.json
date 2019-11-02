@@ -24,7 +24,14 @@
         "extendInfo": "Info.plist",
         "appBundleId": "de.heilerich.actualmoney",
         "appCategoryType": "public.app-category.finance",
-        "icon": "Icon"
+        "icon": "Icon",
+        "ignore": [
+          ".*\\.(sketch|png|md|icns)$",
+          "LICENSE",
+          "patches\\/{0,1}.*",
+          ".*\\.lock$",
+          "Info\\.plist"
+        ]
       },
       "makers": [
         {

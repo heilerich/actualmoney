@@ -24,9 +24,6 @@
         "extendInfo": "Info.plist",
         "appBundleId": "de.heilerich.actualmoney",
         "appCategoryType": "public.app-category.finance",
-        "osxSign": {
-          "type": "development"
-        },
         "icon": "Icon"
       },
       "makers": [

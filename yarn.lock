@@ -3917,6 +3917,11 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+vue-js-popover@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/vue-js-popover/-/vue-js-popover-1.1.8.tgz#9578656bbef9033a9373528774753f0520f2e83f"
+  integrity sha512-u2RN08XU3ZhatES48z3C0Yv/+Ft0hXkcKS63DjK9uX7oImQWsuC5xUC74CG0aQV+o8rUwgoikZFo696LTNNF1g==
+
 vue-loading-overlay@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/vue-loading-overlay/-/vue-loading-overlay-3.2.0.tgz#7896f195e26a8d915219139a096367c9ad2c3c61"

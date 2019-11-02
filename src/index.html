@@ -22,6 +22,19 @@
                 Load Accounts
             </button>
 
+            <span class="btn btn-default btn-dropdown">
+              <span class="icon icon-text icon-database"></span>
+              <select class="btn btn-default btn-dropdown" v-model="selectedBudget">
+                  <option 
+                  v-for="budget in budgets"
+                  v-bind:key="budget"
+                  v-bind:value="budget"
+                >
+                  {{ budget }}
+                </option>
+              </select>
+            </span>
+
             <button class="btn btn-default pull-right" v-on:click="sendTransactions">
                 <span class="icon icon-download icon-text"></span> 
                 Import

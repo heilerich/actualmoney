@@ -10,9 +10,9 @@ const ElectronStore = require('electron-store');
 const moment = require('moment')
 const overlay = require('vue-loading-overlay')
 const Swal = require('sweetalert2')
+const os = require('os')
 
 const store = new ElectronStore();
-const budget = "Meins"
 
 Vue.use(overlay)
 
@@ -26,7 +26,9 @@ var app = new Vue({
     accounts: [],
     importAccounts: {},
     importTransactions: {},
-    accountMatch: {}
+    accountMatch: {},
+    budgets: getBudgets().budgets,
+    selectedBudget: getBudgets().selectedBudget
   },
   methods: {
     selectAccount: function (id) {
@@ -44,7 +46,8 @@ var app = new Vue({
           timer: 2000
         })
       }, 1000)
-      this.accounts = await actual.runWithBudget(budget, async function() {
+      if (!this.selectedBudget) { return }
+      this.accounts = await actual.runWithBudget(this.selectedBudget, async function() {
         return await Promise.all((await actual.getAccounts()).map(async (account) => {
           let transactions = (await actual.getTransactions(account.id)).map( (transaction) => {
             return {...transaction, date: moment(transaction.date, 'YYYY-MM-DD')}
@@ -97,7 +100,7 @@ var app = new Vue({
 
       let jobs = (this.accounts.map((account) => {
         let records = this.transactionsToSend(account.id)
-        if (!records) { return null }
+        if (!records || !this.selectedBudget) { return null }
 
         let transactions = records.map(record => {
           return {
@@ -117,7 +120,7 @@ var app = new Vue({
         }
       })).filter(ele => ele != null)
 
-      await actual.runWithBudget(budget, async function() {
+      await actual.runWithBudget(this.selectedBudget, async function() {
         return await Promise.all(jobs.map( async(job) => actual.importTransactions(job.id, job.transactions)))
       })
 
@@ -129,6 +132,11 @@ var app = new Vue({
           showConfirmButton: false,
           timer: 2000
       })
+    },
+    getBudgets: function() {
+      let {selectedBudget, budgets} = getBudgets()
+      this.selectedBudget = selectedBudget
+      this.budgets = budgets
     }
   },
   mounted() {
@@ -136,6 +144,7 @@ var app = new Vue({
     if (storedMatches) {
       this.accountMatch = storedMatches;
     }
+    this.getBudgets()
   },
   watch: {
     accountMatch(newMatches) {
@@ -147,6 +156,9 @@ var app = new Vue({
       if (newValue !== 'default') {
         Vue.set(this.accountMatch, this.selectedAccount, newValue)
       }
+    },
+    selectedBudget() {
+      this.loadAccounts()
     }
   }
 })
@@ -179,6 +191,19 @@ function openFile(path) {
     }
     parseCsv(data)
   })
+}
+
+function getBudgets() {
+  try {
+    let path = os.homedir() + '/Library/Application Support/Actual/global-store.json'
+    let actualSettings = JSON.parse(fs.readFileSync(path))
+    this.selectedBudget = actualSettings['lastBudget']
+    this.budgets = fs.readdirSync(actualSettings['document-dir'], { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
+  } catch (error) {
+    console.error(error)
+  }
+  return {selectedBudget, budgets}
 }
 
 function parseCsv(data) {

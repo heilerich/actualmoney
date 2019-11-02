@@ -42,3 +42,21 @@
 .pane-group div{
     overflow: scroll;
 }
+
+.btn select {
+    -webkit-appearance: none;
+    border: none;
+    box-sizing: border-box;
+    background: none;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    left: -15px;
+    padding-left: 15px;
+    width: 100px;
+}
+
+.btn-dropdown:after {
+    margin-left: -25px;
+}

@@ -99,21 +99,43 @@
                     <p>
                       <span v-if="!inSync(selectedAccount, selectedImportAccount)">
                           <span class="negative">Out of sync.</span>
-                          <i>Actual</i> balance ({{ accounts.find(acc => acc.id == selectedAccount).balance }}€)
-                          does not equal imported balance ({{ importAccounts[selectedImportAccount].balance }}€).
+                          <i>Actual</i> balance ({{ selectedAccountOb.balance }}€)
+                          does not equal imported balance ({{ selectedImportAccountOb.balance }}€).
                       </span>
                       <span v-if="inSync(selectedAccount, selectedImportAccount)">
                           <span class="positive">Account is in sync.</span>
-                          Balance: {{ importAccounts[selectedImportAccount].balance }}€
+                          Cleared balance: {{ selectedImportAccountOb.balance }}€
                       </span>
                     </p>
                     <p>
                         {{ transactionsToSend(selectedAccount).length }} 
                         transaction{{transactionsToSend(selectedAccount).length != 1 ? 's' : ''}} to import.
-                        {{ importAccounts[selectedImportAccount].transactions - transactionsToSend(selectedAccount).length }}
-                        transaction{{ importAccounts[selectedImportAccount].transactions - transactionsToSend(selectedAccount).length != 1 ? 's' : ''}}
+                        {{ selectedImportAccountOb.transactions - transactionsToSend(selectedAccount).length }}
+                        transaction{{ selectedImportAccountOb.transactions - transactionsToSend(selectedAccount).length != 1 ? 's' : ''}}
                         were ignored because they predate the account starting balance.
                     </p>
+                    <div v-if="selectedAccountOb.unclearedTransactions.length > 0">
+                      <h5>Uncleared Transactions ({{selectedAccountOb.unclearedTransactions.length}})</h5>
+                      <table class="table-striped">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Payee</th>
+                              <th>Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              v-for="transaction in selectedAccountOb.unclearedTransactions"
+                              v-bind:key="transaction.id"
+                            >
+                              <td>{{transaction.date.format('DD.MM.YYYY')}}</td>
+                              <td>{{transaction.payee}}</td>
+                              <td>{{transaction.amount/100}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                   </div>
                 </div>
               </div>

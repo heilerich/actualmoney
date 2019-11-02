@@ -30,6 +30,14 @@ var app = new Vue({
     budgets: getBudgets().budgets,
     selectedBudget: getBudgets().selectedBudget
   },
+  computed: {
+    selectedAccountOb() {
+      return this.accounts.find(acc => acc.id == this.selectedAccount)
+    },
+    selectedImportAccountOb() {
+      return this.importAccounts[this.selectedImportAccount]
+    },
+  },
   methods: {
     selectAccount: function (id) {
       this.selectedAccount = id
@@ -52,10 +60,12 @@ var app = new Vue({
           let transactions = (await actual.getTransactions(account.id)).map( (transaction) => {
             return {...transaction, date: moment(transaction.date, 'YYYY-MM-DD')}
           })
-          let balance = transactions.reduce((total, current) => { return total + current.amount }, 0) / 100
           let firstTransaction = moment.min(transactions.map(transaction => transaction.date))
-
-          return {...account, transactions, balance, firstTransaction }
+          let unclearedTransactions = transactions
+            .filter(transaction => transaction.imported_id == null && transaction.date != firstTransaction && transaction.transfer_id == null)
+          console.log(unclearedTransactions)
+          let balance = grandTotal(transactions) - grandTotal(unclearedTransactions)
+          return {...account, transactions, balance, firstTransaction, unclearedTransactions }
         }))
       })
       clearTimeout(accountTimeout)
@@ -234,6 +244,10 @@ function parseCsv(data) {
   })
 
   app.loadAccounts()
+}
+
+function grandTotal(transactions) {
+  return transactions.reduce((total, current) => { return total + current.amount }, 0) / 100
 }
 
 ipcRenderer.on('open-file', (event, message) => {

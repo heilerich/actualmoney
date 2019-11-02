@@ -63,7 +63,6 @@ var app = new Vue({
           let firstTransaction = moment.min(transactions.map(transaction => transaction.date))
           let unclearedTransactions = transactions
             .filter(transaction => transaction.imported_id == null && transaction.date != firstTransaction && transaction.transfer_id == null)
-          console.log(unclearedTransactions)
           let balance = grandTotal(transactions) - grandTotal(unclearedTransactions)
           return {...account, transactions, balance, firstTransaction, unclearedTransactions }
         }))

@@ -1,7 +1,7 @@
 {
   "name": "actualmoney",
   "productName": "ActualMoney",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -19,26 +19,7 @@
   },
   "license": "MIT",
   "config": {
-    "forge": {
-      "packagerConfig": {
-        "extendInfo": "Info.plist",
-        "appBundleId": "de.heilerich.actualmoney",
-        "appCategoryType": "public.app-category.finance",
-        "icon": "Icon",
-        "ignore": [
-          ".*\\.(sketch|png|md|icns)$",
-          "LICENSE",
-          "patches\\/{0,1}.*",
-          ".*\\.lock$",
-          "Info\\.plist"
-        ]
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-zip"
-        }
-      ]
-    }
+    "forge": "./forge.config.js"
   },
   "dependencies": {
     "@actual-app/api": "^1.0.9",
@@ -60,6 +41,7 @@
     "@electron-forge/maker-rpm": "6.0.0-beta.45",
     "@electron-forge/maker-squirrel": "6.0.0-beta.45",
     "@electron-forge/maker-zip": "6.0.0-beta.45",
+    "dotenv": "^8.2.0",
     "electron": "7.0.0"
   }
 }

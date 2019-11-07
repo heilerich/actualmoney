@@ -1,4 +1,5 @@
 os: osx
+osx_image: xcode11.2
 language: node_js
 node_js:
 - 11
@@ -8,6 +9,9 @@ cache:
   - node_modules
   - "$HOME/.cache/electron"
   - "$HOME/.cache/electron-builder"
+before_script:
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then chmod +x add-osx-cert.sh; fi
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then ./add-osx-cert.sh; fi
 script:
 - yarn install
 - yarn package

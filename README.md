@@ -17,7 +17,7 @@ ActualMoney is a macOS application that synchronises bank statements from [Money
 
 Installation
 ------------
-1. Download latest release form [GitHub releases](https://github.com/heilerich/actualmoney)
+1. Download latest release form [GitHub releases](https://github.com/heilerich/actualmoney/releases)
 2. Extract ZIP and drop application into `/Applications`
 
 Usage

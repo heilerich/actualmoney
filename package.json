@@ -1,7 +1,7 @@
 {
   "name": "actualmoney",
   "productName": "ActualMoney",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -17,6 +17,10 @@
     "name": "Felix Heilmeyer",
     "email": "code@fehe.eu"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/heilerich/actualmoney"
+  },
   "license": "MIT",
   "config": {
     "forge": "./forge.config.js"
@@ -30,6 +34,7 @@
     "moment": "^2.24.0",
     "patch-package": "^6.2.0",
     "sweetalert2": "^8.18.7",
+    "update-electron-app": "^1.5.0",
     "vue": "^2.6.10",
     "vue-js-popover": "^1.1.8",
     "vue-loading-overlay": "^3.2.0"

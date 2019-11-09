@@ -3,6 +3,8 @@ const {app, BrowserWindow, Menu, shell} = require('electron')
 const defaultMenu = require('electron-default-menu');
 const {checkExtensionVersion} = require('./extension')
 
+require('update-electron-app')()
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow

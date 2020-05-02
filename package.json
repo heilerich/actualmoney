@@ -1,7 +1,7 @@
 {
   "name": "actualmoney",
   "productName": "ActualMoney",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -18,8 +18,8 @@
     "email": "code@fehe.eu"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/heilerich/actualmoney"
+    "type": "git",
+    "url": "https://github.com/heilerich/actualmoney"
   },
   "license": "MIT",
   "config": {

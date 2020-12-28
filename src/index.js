@@ -2,8 +2,7 @@
 const {app, BrowserWindow, Menu, shell} = require('electron')
 const defaultMenu = require('electron-default-menu');
 const {checkExtensionVersion} = require('./extension')
-
-require('update-electron-app')()
+const { autoUpdater } = require("electron-updater")
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -119,6 +118,5 @@ app.on('ready', () => {
     createWindow()
   }
   setupMenu()
+  autoUpdater.checkForUpdatesAndNotify()
 })
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

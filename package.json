@@ -2,14 +2,13 @@
   "name": "actualmoney",
   "productName": "ActualMoney",
   "version": "0.0.8",
-  "description": "My Electron application description",
+  "description": "Synchronises bank statements from MoneyMoney.app to Actual.app",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\"",
+    "start": "electron .",
+    "package": "electron-builder --dir",
+    "dist": "electron-builder",
+    "lint": "standard",
     "postinstall": "patch-package"
   },
   "keywords": [],
@@ -22,31 +21,53 @@
     "url": "https://github.com/heilerich/actualmoney"
   },
   "license": "MIT",
-  "config": {
-    "forge": "./forge.config.js"
+  "build": {
+    "productName": "ActualMoney",
+    "appId": "de.heilerich.actualmoney",
+    "directories": {
+      "output": "build"
+    },
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "Icon.icns",
+      "publish": [
+        "github"
+      ],
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    }
   },
   "dependencies": {
     "@actual-app/api": "^1.0.9",
     "csv-parse": "^4.6.5",
     "electron-default-menu": "^1.0.1",
-    "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
+    "electron-updater": "^4.3.5",
     "moment": "^2.24.0",
     "patch-package": "^6.2.0",
     "sweetalert2": "^8.18.7",
-    "update-electron-app": "^1.5.0",
     "vue": "^2.6.10",
     "vue-js-popover": "^1.1.8",
     "vue-loading-overlay": "^3.2.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.45",
-    "@electron-forge/maker-deb": "6.0.0-beta.45",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.45",
-    "@electron-forge/maker-rpm": "6.0.0-beta.45",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.45",
-    "@electron-forge/maker-zip": "6.0.0-beta.45",
-    "dotenv": "^8.2.0",
-    "electron": "7.2.4"
+    "electron": "7.2.4",
+    "electron-builder": "^22.9.1",
+    "standard": "*"
   }
 }

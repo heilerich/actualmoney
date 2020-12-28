@@ -27,8 +27,8 @@ var app = new Vue({
     importAccounts: {},
     importTransactions: {},
     accountMatch: {},
-    budgets: getBudgets().budgets,
-    selectedBudget: getBudgets().selectedBudget
+    budgets: getBudgets() ? getBudgets().budgets : [],
+    selectedBudget: getBudgets() ? getBudgets().selectedBudget : {}
   },
   computed: {
     selectedAccountOb() {
@@ -209,10 +209,12 @@ function getBudgets() {
     let path = os.homedir() + '/Library/Application Support/Actual/global-store.json'
     let actualSettings = JSON.parse(fs.readFileSync(path))
     this.selectedBudget = actualSettings['lastBudget']
-    this.budgets = fs.readdirSync(actualSettings['document-dir'], { withFileTypes: true })
+    let documentDir = actualSettings['document-dir'] || os.homedir() + '/Documents/Actual';
+    this.budgets = fs.readdirSync(documentDir, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
   } catch (error) {
     console.error(error)
+    return {selectedBudget: '', budgets: []};
   }
   return {selectedBudget, budgets}
 }

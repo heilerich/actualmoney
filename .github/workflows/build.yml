@@ -59,11 +59,11 @@ jobs:
       - name: Upload dmg files
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os }}-artifacts
+          name: mac-artifacts
           path: build/*.dmg
 
       - name: Upload metadata yml files
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os }}-artifacts
+          name: mac-artifacts
           path: build/latest*.yml

@@ -27,9 +27,11 @@
     "directories": {
       "output": "build"
     },
+    "afterSign": "electron-builder-notarize",
     "mac": {
       "category": "public.app-category.finance",
       "icon": "Icon.icns",
+      "hardenedRuntime": true,
       "publish": [
         "github"
       ],
@@ -68,6 +70,7 @@
   "devDependencies": {
     "electron": "7.2.4",
     "electron-builder": "^22.9.1",
+    "electron-builder-notarize": "^1.2.0",
     "standard": "*"
   }
 }

@@ -1,24 +1,24 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 const fs = require('fs')
 const parse = require('csv-parse/lib/sync')
 const Vue = require('vue/dist/vue.common')
 const actual = require('@actual-app/api')
-const ElectronStore = require('electron-store');
+const ElectronStore = require('electron-store')
 const moment = require('moment')
 const overlay = require('vue-loading-overlay')
 const Swal = require('sweetalert2')
 const os = require('os')
 
-const store = new ElectronStore();
+const store = new ElectronStore()
 
 Vue.use(overlay)
 
-var accountTimeout = null
+let accountTimeout = null
 
-var app = new Vue({
+const app = new Vue({
   el: '#app',
   data: {
     selectedAccount: null,
@@ -31,12 +31,12 @@ var app = new Vue({
     selectedBudget: getBudgets() ? getBudgets().selectedBudget : {}
   },
   computed: {
-    selectedAccountOb() {
-      return this.accounts.find(acc => acc.id == this.selectedAccount)
+    selectedAccountOb () {
+      return this.accounts.find(acc => acc.id === this.selectedAccount)
     },
-    selectedImportAccountOb() {
+    selectedImportAccountOb () {
       return this.importAccounts[this.selectedImportAccount]
-    },
+    }
   },
   methods: {
     selectAccount: function (id) {
@@ -55,16 +55,16 @@ var app = new Vue({
         })
       }, 1000)
       if (!this.selectedBudget) { return }
-      this.accounts = await actual.runWithBudget(this.selectedBudget, async function() {
+      this.accounts = await actual.runWithBudget(this.selectedBudget, async function () {
         return await Promise.all((await actual.getAccounts()).map(async (account) => {
-          let transactions = (await actual.getTransactions(account.id)).map( (transaction) => {
-            return {...transaction, date: moment(transaction.date, 'YYYY-MM-DD')}
+          const transactions = (await actual.getTransactions(account.id)).map((transaction) => {
+            return { ...transaction, date: moment(transaction.date, 'YYYY-MM-DD') }
           })
-          let firstTransaction = moment.min(transactions.map(transaction => transaction.date))
-          let unclearedTransactions = transactions
-            .filter(transaction => transaction.imported_id == null && transaction.date != firstTransaction && transaction.transfer_id == null)
-          let balance = grandTotal(transactions) - grandTotal(unclearedTransactions)
-          return {...account, transactions, balance, firstTransaction, unclearedTransactions }
+          const firstTransaction = moment.min(transactions.map(transaction => transaction.date))
+          const unclearedTransactions = transactions
+            .filter(transaction => transaction.imported_id == null && transaction.date !== firstTransaction && transaction.transfer_id == null)
+          const balance = grandTotal(transactions) - grandTotal(unclearedTransactions)
+          return { ...account, transactions, balance, firstTransaction, unclearedTransactions }
         }))
       })
       clearTimeout(accountTimeout)
@@ -73,45 +73,44 @@ var app = new Vue({
       this.importAccounts = {}
       this.importTransactions = {}
     },
-    transactionCount: function(id) {
-      let importId = this.accountMatch[id]
-      let importAccount = this.importAccounts[importId]
-      if (!importId || !importAccount || !importAccount.transactions || importAccount.transactions == 0) { return 'No transactions' }
+    transactionCount: function (id) {
+      const importId = this.accountMatch[id]
+      const importAccount = this.importAccounts[importId]
+      if (!importId || !importAccount || !importAccount.transactions || importAccount.transactions === 0) { return 'No transactions' }
 
-
-      if (importAccount.transactions == 1) { return 'One transaction' }
+      if (importAccount.transactions === 1) { return 'One transaction' }
       return `${importAccount.transactions} transactions`
     },
-    inSync: function(accountId, importAccountId) {
-      let account = this.accounts.find(acc => acc.id == accountId)
-      let importAccount = importAccountId != null ? this.importAccounts[importAccountId] : this.importAccounts[this.accountMatch[accountId]]
+    inSync: function (accountId, importAccountId) {
+      const account = this.accounts.find(acc => acc.id === accountId)
+      const importAccount = importAccountId != null ? this.importAccounts[importAccountId] : this.importAccounts[this.accountMatch[accountId]]
       if (!account || !importAccount) { return null }
       return account.balance === importAccount.balance
     },
-    transactionsToSend: function(accountId) {
-      let account = this.accounts.find(acc => acc.id == accountId)
-      let importAccount = this.importAccounts[this.accountMatch[accountId]]
+    transactionsToSend: function (accountId) {
+      const account = this.accounts.find(acc => acc.id === accountId)
+      const importAccount = this.importAccounts[this.accountMatch[accountId]]
       if (!account || !importAccount) { return null }
 
-      return Object.values(this.importTransactions).filter (transaction => {
-        return transaction.MyAccountNumber == importAccount.number && transaction.Date > account.firstTransaction
+      return Object.values(this.importTransactions).filter(transaction => {
+        return transaction.MyAccountNumber === importAccount.number && transaction.Date > account.firstTransaction
       })
     },
-    sendTransactions: async function() {
+    sendTransactions: async function () {
       await this.loadAccounts()
       if (!this.accounts || this.accounts.length === 0) {
         return
       }
 
-      let loader = this.$loading.show({
-        canCancel: false,
-      });
+      const loader = this.$loading.show({
+        canCancel: false
+      })
 
-      let jobs = (this.accounts.map((account) => {
-        let records = this.transactionsToSend(account.id)
+      const jobs = (this.accounts.map((account) => {
+        const records = this.transactionsToSend(account.id)
         if (!records || !this.selectedBudget) { return null }
 
-        let transactions = records.map(record => {
+        const transactions = records.map(record => {
           return {
             account_id: account.id,
             date: record.Date.format('YYYY-MM-DD'),
@@ -129,44 +128,44 @@ var app = new Vue({
         }
       })).filter(ele => ele != null)
 
-      await actual.runWithBudget(this.selectedBudget, async function() {
-        return await Promise.all(jobs.map( async(job) => actual.importTransactions(job.id, job.transactions)))
+      await actual.runWithBudget(this.selectedBudget, async function () {
+        return await Promise.all(jobs.map(async (job) => actual.importTransactions(job.id, job.transactions)))
       })
 
       await this.loadAccounts()
       loader.hide()
       Swal.fire({
-          type: 'success',
-          title: 'Import finished',
-          showConfirmButton: false,
-          timer: 2000
+        type: 'success',
+        title: 'Import finished',
+        showConfirmButton: false,
+        timer: 2000
       })
     },
-    getBudgets: function() {
-      let {selectedBudget, budgets} = getBudgets()
+    getBudgets: function () {
+      const { selectedBudget, budgets } = getBudgets()
       this.selectedBudget = selectedBudget
       this.budgets = budgets
     }
   },
-  mounted() {
-    let storedMatches = store.get('accountMatch')
+  mounted () {
+    const storedMatches = store.get('accountMatch')
     if (storedMatches) {
-      this.accountMatch = storedMatches;
+      this.accountMatch = storedMatches
     }
     this.getBudgets()
   },
   watch: {
-    accountMatch(newMatches) {
-      if(newMatches !== {}) {
+    accountMatch (newMatches) {
+      if (newMatches !== {}) {
         store.set('accountMatch', newMatches)
       }
     },
-    selectedImportAccount(newValue) {
+    selectedImportAccount (newValue) {
       if (newValue !== 'default') {
         Vue.set(this.accountMatch, this.selectedAccount, newValue)
       }
     },
-    selectedBudget() {
+    selectedBudget () {
       this.accounts = []
       this.selectedAccount = null
       this.loadAccounts()
@@ -176,63 +175,63 @@ var app = new Vue({
 
 app.loadAccounts()
 
-var content = document.getElementById('app')
+const content = document.getElementById('app')
 content.ondragover = () => {
-  return false;
-};
+  return false
+}
 content.ondragleave = () => {
-  return false;
-};
+  return false
+}
 content.ondragend = () => {
-  return false;
-};
+  return false
+}
 content.ondrop = (e) => {
-  e.preventDefault();
-  for (let f of e.dataTransfer.files) {
-      openFile(f.path)
+  e.preventDefault()
+  for (const f of e.dataTransfer.files) {
+    openFile(f.path)
   }
-  return false;
-};
+  return false
+}
 
-function openFile(path) {
+function openFile (path) {
   fs.readFile(path, 'utf-8', (err, data) => {
-    if(err){
-        console.log("An error ocurred reading the file :" + err.message);
-        return;
+    if (err) {
+      console.log('An error ocurred reading the file :' + err.message)
+      return
     }
     parseCsv(data)
   })
 }
 
-function getBudgets() {
+function getBudgets () {
   try {
-    let path = os.homedir() + '/Library/Application Support/Actual/global-store.json'
-    let actualSettings = JSON.parse(fs.readFileSync(path))
-    this.selectedBudget = actualSettings['lastBudget']
-    let documentDir = actualSettings['document-dir'] || os.homedir() + '/Documents/Actual';
+    const path = os.homedir() + '/Library/Application Support/Actual/global-store.json'
+    const actualSettings = JSON.parse(fs.readFileSync(path))
+    this.selectedBudget = actualSettings.lastBudget
+    const documentDir = actualSettings['document-dir'] || os.homedir() + '/Documents/Actual'
     this.budgets = fs.readdirSync(documentDir, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
   } catch (error) {
     console.error(error)
-    return {selectedBudget: '', budgets: []};
+    return { selectedBudget: '', budgets: [] }
   }
-  return {selectedBudget, budgets}
+  return { selectedBudget: this.selectedBudget, budgets: this.budgets }
 }
 
-function parseCsv(data) {
+function parseCsv (data) {
   const records = parse(data, {
     columns: true,
     delimiter: ';',
     skip_empty_lines: true
   })
 
-  records.forEach( record => {
+  records.forEach(record => {
     Vue.set(app.importAccounts, record.MyAccountNumber, {
       name: record.MyAccountName,
       balance: parseFloat(record.MyAccountBalance),
-      number: record.MyAccountNumber,
+      number: record.MyAccountNumber
     })
-    let newRecord = {
+    const newRecord = {
       ...record,
       Date: moment(moment.unix(record.Date).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
       ValueDate: moment.unix(record.ValueDate)
@@ -241,18 +240,18 @@ function parseCsv(data) {
   })
 
   Object.keys(app.importAccounts).forEach((key) => {
-    let value = app.importAccounts[key]
-    let transactionCount = Object.values(app.importTransactions).filter(transaction => transaction.MyAccountNumber == value.number).length
-    app.importAccounts[key]['transactions'] = transactionCount
+    const value = app.importAccounts[key]
+    const transactionCount = Object.values(app.importTransactions).filter(transaction => transaction.MyAccountNumber === value.number).length
+    app.importAccounts[key].transactions = transactionCount
   })
 
   app.loadAccounts()
 }
 
-function grandTotal(transactions) {
+function grandTotal (transactions) {
   return transactions.reduce((total, current) => { return total + current.amount }, 0) / 100
 }
 
 ipcRenderer.on('open-file', (event, message) => {
-    openFile(message)
+  openFile(message)
 })

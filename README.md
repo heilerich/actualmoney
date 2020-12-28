@@ -10,6 +10,7 @@
 ![GitHub](https://img.shields.io/github/license/heilerich/actualmoney)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/heilerich/actualmoney?include_prereleases&label=latest)](https://github.com/heilerich/actualmoney/releases)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/heilerich/actualmoney?label=stable)](https://github.com/heilerich/actualmoney/releases)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 </div>
 

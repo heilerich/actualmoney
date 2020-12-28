@@ -1,8 +1,8 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu, shell} = require('electron')
-const defaultMenu = require('electron-default-menu');
-const {checkExtensionVersion} = require('./extension')
-const { autoUpdater } = require("electron-updater")
+const { app, BrowserWindow, Menu, shell } = require('electron')
+const defaultMenu = require('electron-default-menu')
+const { checkExtensionVersion } = require('./extension')
+const { autoUpdater } = require('electron-updater')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -10,7 +10,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  if (mainWindow) {return}
+  if (mainWindow) { return }
   mainWindow = new BrowserWindow({
     width: 800,
     height: 400,
@@ -40,7 +40,7 @@ function createWindow () {
 let installerWindow
 
 function showInstaller () {
-  if (installerWindow) {return}
+  if (installerWindow) { return }
   installerWindow = new BrowserWindow({
     width: 450,
     height: 550,
@@ -55,7 +55,6 @@ function showInstaller () {
     installerWindow = null
   })
 }
-
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -74,9 +73,9 @@ app.on('activate', function () {
   }
 })
 
-app.on('open-file', function(event, path) {
+app.on('open-file', function (event, path) {
   event.preventDefault()
-  if(!mainWindow) {
+  if (!mainWindow) {
     if (!app.isReady()) {
       app.once('ready', () => {
         createWindow()
@@ -95,20 +94,20 @@ app.on('open-file', function(event, path) {
   }
 })
 
-function setupMenu() {
-  const menu = defaultMenu(app, shell);
- 
+function setupMenu () {
+  const menu = defaultMenu(app, shell)
+
   // Add custom menu
-  menu[0].submenu.splice(1,0, {
+  menu[0].submenu.splice(1, 0, {
     label: 'Install MoneyMoney extension',
-      click: (item, focusedWindow) => {
-        showInstaller()
+    click: (item, focusedWindow) => {
+      showInstaller()
     }
   })
-  menu[0].submenu.splice(1,0, { type: 'separator' })
- 
+  menu[0].submenu.splice(1, 0, { type: 'separator' })
+
   // Set top-level application menu, using modified template
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menu))
 }
 
 app.on('ready', () => {

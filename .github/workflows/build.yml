@@ -3,8 +3,9 @@ name: Build/release
 on:
   push:
     branches:
-      - master
       - staging
+    tags:
+      - '*'
 
 jobs:
   release:

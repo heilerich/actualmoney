@@ -35,6 +35,16 @@
       "publish": [
         "github"
       ],
+      "extendInfo": {
+        "CFBundleDocumentTypes": [
+          {
+            "CFBundleTypeName": "ActualMoney Import File",
+            "CFBundleTypeExtensions": ["actualmoney"],
+            "CFBundleTypeRole": "Viewer",
+            "LSHandlerRank": "Alternate"
+          }
+        ]
+      },
       "entitlements": "entitlements.mac.plist",
       "entitlementsInherit": "entitlements.mac.plist"
     },

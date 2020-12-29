@@ -53,7 +53,7 @@ jobs:
       - name: Upload zip files
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os }}-artifacts
+          name: mac-artifacts
           path: build/*.zip
       
       - name: Upload dmg files

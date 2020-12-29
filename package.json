@@ -31,7 +31,6 @@
     "mac": {
       "category": "public.app-category.finance",
       "icon": "Icon.icns",
-      "target": "dmg",
       "hardenedRuntime": true,
       "publish": [
         "github"

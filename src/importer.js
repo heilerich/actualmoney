@@ -112,7 +112,7 @@ const app = new Vue({
 
         const transactions = records.map(record => {
           return {
-            account_id: account.id,
+            account: account.id,
             date: record.Date.format('YYYY-MM-DD'),
             amount: parseFloat(record.Amount) * 100,
             imported_payee: record.Name,

@@ -8,9 +8,9 @@
   integrity sha512-GLyWIFBbGvpKPGo55JyRZAo4lVbnBiD52cKlw/0Vt+wnmKvWJkpZvsjVoaIolyBXDeAQKSicRtqFNPem9w0WYA==
 
 "@actual-app/api@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@actual-app/api/-/api-1.0.9.tgz#6a505dec04204b566002f98306560f1571194d50"
-  integrity sha512-T4f0gCAAswxUS9utLVTCnM/ADVeI5ZFzPdHSQDQhzcHekgxD9YkuKPLB0lg+6K4k1EGIr2nqjJmitYe1OHHq1A==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@actual-app/api/-/api-1.1.2.tgz#0c4713b210791194957850c10969871fc25911cb"
+  integrity sha512-6YsHJtAmCzU+J2sA2xXxyrB3Cj30+qcE8sqsnxHURMqiNAgNqlWn2oTnUcilGS2bybIjw5Z5IQTvDMnB/rGDIw==
   dependencies:
     node-ipc "9.1.1"
     uuid "3.3.2"
@@ -868,9 +868,9 @@ duplexer3@^0.1.4:
   integrity sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI=
 
 easy-stack@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.0.tgz#12c91b3085a37f0baa336e9486eac4bf94e3e788"
-  integrity sha1-EskbMIWjfwuqM26UhurEv5Tj54g=
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.1.tgz#8afe4264626988cabb11f3c704ccd0c835411066"
+  integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
 
 ejs@^3.1.5:
   version "3.1.5"

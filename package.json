@@ -39,7 +39,9 @@
         "CFBundleDocumentTypes": [
           {
             "CFBundleTypeName": "ActualMoney Import File",
-            "CFBundleTypeExtensions": ["actualmoney"],
+            "CFBundleTypeExtensions": [
+              "actualmoney"
+            ],
             "CFBundleTypeRole": "Viewer",
             "LSHandlerRank": "Alternate"
           }

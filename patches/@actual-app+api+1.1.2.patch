@@ -1,13 +1,12 @@
 diff --git a/node_modules/@actual-app/api/connection.js b/node_modules/@actual-app/api/connection.js
-index aea2943..f0b94b1 100644
+index 76d2544..d40940c 100644
 --- a/node_modules/@actual-app/api/connection.js
 +++ b/node_modules/@actual-app/api/connection.js
-@@ -30,6 +30,8 @@ async function init(socketName) {
+@@ -41,6 +41,7 @@ async function init(socketName) {
      // TODO: This could spawn Actual automatically. The ideal solution
      // would be to bundle the entire backend and embed it directly
      // into the distributed library.
-+    socketClient = null;
-+    initialized = null;
++    initialized = false;
      throw new Error("Couldn't connect to Actual. Please run the app first.");
    }
  

@@ -116,7 +116,7 @@ const app = new Vue({
             date: record.Date.format('YYYY-MM-DD'),
             amount: parseFloat(record.Amount) * 100,
             imported_payee: record.Name,
-            payee: record.Name,
+            payee_name: record.Name,
             notes: record.Purpose,
             imported_id: record.ID
           }

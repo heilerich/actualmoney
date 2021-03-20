@@ -114,7 +114,7 @@ const app = new Vue({
           return {
             account: account.id,
             date: record.Date.format('YYYY-MM-DD'),
-            amount: parseFloat(record.Amount) * 100,
+            amount: Math.trunc(parseFloat(record.Amount) * 100),
             imported_payee: record.Name,
             payee_name: record.Name,
             notes: record.Purpose,

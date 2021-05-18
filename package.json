@@ -1,7 +1,7 @@
 {
   "name": "actualmoney",
   "productName": "ActualMoney",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Synchronises bank statements from MoneyMoney.app to Actual.app",
   "main": "src/index.js",
   "scripts": {
